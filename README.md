@@ -67,8 +67,10 @@ docker run --rm -it \
 ```
 
 When running the docker file you must mount 2 directories: 
- 1. virulencefinder_db (VirulenceFinder database) downloaded from bitbucket
+
+ 1. choleraefinder_db (CholeraeFinder database) downloaded from bitbucket
  2. An output/input folder from where the input file can be reached and an output files can be saved. 
+ 
 Here we mount the current working directory (using $pwd) and use this as the output directory, 
 the input file should be reachable from this directory as well. The path to the infile and outfile
 directories should be relative to the monuted current working directory.
@@ -95,7 +97,7 @@ directories should be relative to the monuted current working directory.
 ## Web-server
 
 A webserver implementing the methods is available at the [CGE website](http://www.genomicepidemiology.org/) and can be found here:
-https://cge.cbs.dtu.dk/services/VirulenceFinder/
+https://cge.cbs.dtu.dk/services/CholeraeFinder/
 
 Citation
 =======
