@@ -89,7 +89,7 @@ class CholeraeFinder(CGEFinder):
                     type_cholerae["pandemic"] = True
                 else:
                     type_cholerae["pandemic"] = False
-                if "rstR_cc" in list_genes or "tcpA_cc" in list_genes:
+                if ("rstR_cc" in list_genes or "tcpA_cc" in list_genes) and ("rstR_et" not in list_genes and "tcpA_et3" not in list_genes):
                     type_cholerae["biotype"] = "Classical"
                 elif "rstR_et" in list_genes or "tcpA_et3" in list_genes:
                     if "ctxB_1" in list_genes and type_cholerae["pandemic"]:
@@ -135,7 +135,6 @@ class CholeraeFinder(CGEFinder):
         homo_aligns = results_method.gene_align_homo
         sbjct_aligns = results_method.gene_align_sbjct
         json_results = dict()
-
         titles = dict()
         rows = dict()
         headers = dict()
@@ -195,6 +194,8 @@ class CholeraeFinder(CGEFinder):
                         variant = ""
                     identity = hit["perc_ident"]
                     coverage = hit["perc_coverage"]
+                    if coverage>100.:
+                        print(gene)
                     sbj_length = hit["sbjct_length"]
                     HSP = hit["HSP_length"]
                     positions_contig = "%s..%s" % (hit["query_start"],
@@ -233,7 +234,6 @@ class CholeraeFinder(CGEFinder):
                      "method": method,
                      "file_format": file_format}
         run_info = {"date": date, "time": time_}
-        print(json_results)
         type_cholerae, prot_class = self.typer(json_results)
         data[service]["user_input"] = userinput
         data[service]["run_info"] = run_info
@@ -264,8 +264,8 @@ class CholeraeFinder(CGEFinder):
             sbjct_file = open(sbjct_filename, "w")
             result_file = open(result_filename, "w")
             # Make results file
-            result_file.write("{} Gene(s)\n\n found in: {}\n\n"
-                              .format(service, ",".join(json_results.keys())))
+            result_file.write("{} Gene(s)\n\n"
+                              .format(service))
             # Write tsv table
             ##TODO##
             rows = [["Database"] + header]
@@ -730,5 +730,4 @@ if __name__ == '__main__':
                                  min_cov=min_cov, threshold=threshold,
                                  blast=method_path,
                                  allowed_overlap=args.acq_overlap)
-        print(dir(blast_run))
         finder.create_results(results_method=blast_run, outdir=out_path)
