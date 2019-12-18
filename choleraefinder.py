@@ -170,9 +170,6 @@ class CholeraeFinder(CGEFinder):
                                                   hit["query_end"], bit_score,
                                                   hit])
 
-            if not contig_res:
-                json_results[db_name][db] = "No hit found"
-
             # Check for overlapping hits, only report the best
             for contig_id, hit_lsts in contig_res.items():
 
@@ -197,6 +194,8 @@ class CholeraeFinder(CGEFinder):
                         variant = ""
                     identity = hit["perc_ident"]
                     coverage = hit["perc_coverage"]
+                    if coverage>100.:
+                        print(gene)
                     sbj_length = hit["sbjct_length"]
                     HSP = hit["HSP_length"]
                     positions_contig = "%s..%s" % (hit["query_start"],
@@ -209,8 +208,8 @@ class CholeraeFinder(CGEFinder):
                     pheno = description.split(":")[0].strip()
                     note = description.split(":")[-1].strip()
                     # Write JSON results dict
-                    json_results[db_name][db].update({contig_id: {}})
-                    json_results[db_name][db][contig_id] = {
+                    json_results[db_name][db].update({header: {}})
+                    json_results[db_name][db][header] = {
                       "vibrio_cholerae_gene": gene,
                       "identity": round(identity, 2),
                       "HSP_length": HSP,
@@ -222,8 +221,7 @@ class CholeraeFinder(CGEFinder):
                       "accession": acc,
                       "predicted_phenotype": pheno,
                       "coverage": round(coverage, 2),
-                      "hit_id": contig_id,
-                      "gene_header": header}
+                      "hit_id": contig_id}
         # Get run info for JSON file
         service = os.path.basename(__file__).replace(".py", "")
         date = time.strftime("%d.%m.%Y")
