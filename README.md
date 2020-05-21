@@ -109,6 +109,11 @@ Siriphap A, Leekitcharoenphon P, Kaas RS, Theethakaew C, Aarestrup FM, Sutheinku
 PLoS One. 2017 Jan 19;12(1):e0169324. doi: 10.1371/journal.pone.0169324. eCollection 2017.
 [Epub ahead of print]
 
+References
+=======
+
+1. Camacho C, Coulouris G, Avagyan V, Ma N, Papadopoulos J, Bealer K, Madden TL. BLAST+: architecture and applications. BMC Bioinformatics 2009; 10:421. 
+2. Clausen PTLC, Aarestrup FM, Lund O. Rapid and precise alignment of raw reads against redundant databases with KMA. BMC Bioinformatics 2018; 19:307. 
 
 License
 =======
