@@ -20,60 +20,90 @@ isolates of Vibrio Choleraes, and attempts to describe the specimen.
 
 ## Installation
 
-Setting up CholeraeFinder program   
-**Warning:** Due to bugs in BioPython 1.74, if you are not using the Docker container, do not use that version if not using Python 3.7.
+Instructions below are for installation in either Docker or Anaconda.
+
+**Warning:** Due to bugs in BioPython 1.74, do not use that version if not using Python 3.7 or above.
+
+Check out the sources:
+
 ```bash
 # Go to wanted location for choleraefinder
-cd /path/to/some/dir
+cd /path/above/choleraefinder
+
 # Clone and enter the choleraefinder directory
 git clone https://bitbucket.org/genomicepidemiology/choleraefinder.git
 cd choleraefinder
 ```
 
-Build Docker container
+#### Install in Docker container
+
 ```bash
 # Build container
 docker build -t choleraefinder .
 ```
 
-#Download and install CholeraeFinder database
+#### Install in Conda environment
+
+```bash
+# Create a Conda environment with python and biopython
+# You may need to first add channels:
+conda config --add channels bioconda conda-forge
+conda create -n choleraefinder python==3.8 biopython
+conda activate choleraefinder
+
+# Add the remaining deps with pip
+pip install cgetools==1.5.5 argparse tabulate
+conda deactivate
+```
+
+### Install the Database
+
+This requires KMA for indexing the database.  For installation instruction,
+see <https://bitbucket.org/genomicepidemiology/kma.git>.
 
 ```bash
 # Go to the directory where you want to store the cholearefinder database
-cd /path/to/some/dir
+cd /path/above/database
 # Clone database from git repository
 git clone https://bitbucket.org/genomicepidemiology/choleraefinder_db.git
+
 cd choleraefinder_db
-CHOLERAE_DB=$(pwd)
-# Install CholeraeFinder database with executable kma_index program
+CHOLERAE_DB=$(pwd -P)
+
+# Index the CholeraeFinder database with kma_index program
 python3 INSTALL.py kma_index
 ```
-
-If kma_index has no bin install please install kma_index from the kma repository:
-https://bitbucket.org/genomicepidemiology/kma
 
 ## Usage
 
 The program can be invoked with the -h option to get help and more information of the service.
 Run Docker container:
 
+#### Run Docker container
 
 ```bash
 # Run choleraefinder container
 docker run --rm -it \
        -v $CHOLERAE_DB:/database \
-       -v $(pwd):/workdir \
+       -v $(pwd -P):/workdir \
        choleraefinder -i [INPUTFILE] -o [OUTDIR] [-p] [-mp] [-l] [-t] [-tmp] [-x]
 ```
 
 When running the docker file you must mount 2 directories: 
 
- 1. choleraefinder_db (CholeraeFinder database) downloaded from bitbucket
- 2. An output/input folder from where the input file can be reached and an output files can be saved. 
+ 1. The directory containing the CholeraeFinder _database_ (`$CHOLERAE_DB` above)
+ 2. An output/input folder from where the input file(s) can be reached and output can saved. 
  
-Here we mount the current working directory (using $pwd) and use this as the output directory, 
-the input file should be reachable from this directory as well. The path to the infile and outfile
-directories should be relative to the monuted current working directory.
+Above we mount the current working directory (using `$pwd -P`).  The input file(s)
+must be reachable from this directory. The path to the infile and outfile directories
+should be relative to the monuted current working directory.
+
+#### Run Conda environment
+
+```bash
+conda activate choleraefinder
+/path/to/choleraefinder/choleraefinder.py --help
+```
 
 
 `-i INPUTFILE	input file (fasta or fastq) relative to pwd, up to 2 files`
