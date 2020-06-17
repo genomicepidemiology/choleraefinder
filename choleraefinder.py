@@ -242,10 +242,10 @@ class CholeraeFinder(CGEFinder):
         data[service]["list_proteins"] = prot_class
 
 
-        pprint.pprint(data)
+        #pprint.pprint(data)
 
         # Save json genes output
-        result_file = "{}/data_CholeraeFinder.json".format(tmp_dir)
+        result_file = "{}/results.json".format(outdir)
         with open(result_file, "w") as outfile:
             json.dump(data, outfile)
 
@@ -427,7 +427,7 @@ class CholeraeFinder(CGEFinder):
         """
         """
         # Check if databases and config file are correct/correponds
-        if databases is '':
+        if databases == '':
             sys.exit("Input Error: No database was specified!\n")
         elif databases is None:
             # Choose all available databases from the config file
