@@ -1,0 +1,32 @@
+package:
+  name: cholerafinder
+  version: 1.0.0
+
+source:
+  url: https://bitbucket.org/genomicepidemiology/CholeraeFinder/get/1.0.0.tar.gz
+
+build:
+  number: 0
+  noarch: generic
+
+requirements:
+  host:
+    - python>=3.5
+    - kma
+    - wget
+  run:
+    - python>=3.5
+    - kma
+    - biopython
+    - tabulate
+    - cgecore
+    - blast
+
+test:
+  commands:
+    - choleraefinder.py -h | grep choleraefinder.py >/dev/null
+
+about:
+  home: https://bitbucket.org/genomicepidemiology/choleraefinder
+  summary: 'The CholeraeFinder service contains one python script choleraefinder.py which is the script of the latest version of the CholeraeFinder service. CholeraeFinder identifies important genes in total or partial sequenced isolates of Vibrio Choleraes, and attempts to describe the specimen.'
+  license: Apache-2.0
